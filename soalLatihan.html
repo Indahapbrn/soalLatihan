@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"/> 
+    <link rel="stylesheet" href="assets/css/style-test.css">
+    <link rel="stylesheet" href="assets/css/sweetalert.css">
+    <link rel="icon" type="image/png" href="images/logorev11.png">
+    <script src="assets/js/sweetalert.min.js"></script>
+    <title> MathSet - Belajar Himpunan </title>
+  </head>
+  <body>
+    <div class="container my-3">
+      <div class="row">
+        <div class="col-lg-10 col-sm-12 mt-2">
+          <div class="card shadow" style="border-radius: 20px;">
+            <div class="card-header" style="border-radius: 20px;">
+              <div class="row">
+                <div class="col-sm-5">
+                  <!-- Tempat untuk waktunya -->
+                  <div class="btn btn-md btn-dark shadow" id="time">00 : 00</div>
+                  <!-- End Tempat Waktu -->
+                </div>
+                <div class="col-sm-7" style="letter-spacing: 3px;">
+                  <h4>Latihan</h4>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Container soal -->
+              
+              <div class="quiz-container">
+                <div id="quiz"></div>
+              </div>
+                <hr>
+                <div class="btn-action text-center">
+                  <button id="back">Sebelumnya</button>
+                  <button id="next">Selanjutnya</button>
+                  <button onclick="JSconfirm()" id="submit">Submit</button>
+                  <script type="text/javascript">
+                    function JSconfirm(){
+                      swal({    
+                        title:"Apakah kamu sudah yakin dengan jawabanmu?",   
+                        type: "warning",   
+                        showCancelButton: true,   
+                        confirmButtonColor: "#DD6B55",   
+                        confirmButtonText: "Ya",   
+                        cancelButtonText: "Tidak",   
+                        closeOnConfirm: false,   
+                        closeOnCancel: false }, 
+                        function(isConfirm){   
+                            if (isConfirm) 
+                        {   
+                            (result());   
+                            } 
+                            else {     
+                                swal("Batal Memeriksa Jawaban!");   
+                                } });
+                    }
+                  </script>
+                </div>
+              <!-- End Container Soal -->
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-sm 12 mt-2">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <span class="btn-number"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/soalLatihan.js"></script>
+    <script>
+
+      let randomQuestion = questions.sort((a, b) => {return 0.5 - Math.random()});
+
+      function buildQuiz() {
+        const output = []
+        let currentNumber = 1
+
+        randomQuestion.forEach((currentQuestion, questionNumber) => {
+          const answers = []
+
+          for(letter in currentQuestion.answers) {
+              answers.push(
+                  `
+                    <label>
+                      <input type="radio" name="question${questionNumber}" value="${letter}" data="${currentNumber}" class="answer">
+                      <span>${letter}. ${currentQuestion.answers[letter]}<span>
+                    </label>
+                  `
+              )
+          }
+
+          output.push(
+              `
+                <div class="slide">
+                  <div class="question">${currentNumber}. ${currentQuestion.question}</div>
+                  <div class="answers">${answers.join("")}</div>
+                </div>
+              `
+          )
+          
+          currentNumber++
+        })
+        questionContainer.innerHTML = output.join("")
+      }
+
+
+      function showSlide(n) {
+        slides[currentSlide].classList.remove('active-slide')
+        slides[n].classList.add('active-slide')
+        currentSlide = n
+
+        if(currentSlide === 0) {
+          backButton.style.display = "none"
+        } else {
+          backButton.style.display = "inline-block"
+        }
+
+        if(currentSlide === slides.length - 1) {
+          nextButton.style.display = "none"
+          submitButton.style.display = "inline-block"
+        } else {
+          nextButton.style.display = "inline-block"
+          submitButton.style.display = "none"
+        }
+      }
+
+      function nextSlide() {
+        showSlide(currentSlide + 1)
+      }
+
+      function backSlide() {
+        showSlide(currentSlide - 1)
+      }
+
+      function paginationSlide(n) {
+        showSlide(n)
+      }
+
+      let questionContainer = document.querySelector("#quiz")
+      let nextButton = document.querySelector("#next") 
+      let backButton = document.querySelector("#back") 
+      let submitButton = document.querySelector("#submit")
+      
+      buildQuiz()
+
+      const slides = document.querySelectorAll(".slide")
+      let currentSlide = 0
+
+      showSlide(currentSlide)
+      nextButton.addEventListener("click", nextSlide)
+      backButton.addEventListener("click", backSlide)
+
+      const numberBtn = document.querySelector(".btn-number");
+      for(i=0; i<randomQuestion.length; i++) {
+        let li = document.createElement("span");
+        li.innerHTML = `<button type="button" class='btn btn-sm btn-outline-secondary mx-1 mt-2' onclick="paginationSlide(${i})">${i+1}</button>`;
+        numberBtn.appendChild(li);
+      }
+      
+      const showTime = document.querySelector('#time');
+      let startMinutes = 60;
+      let seconds = 0;
+
+      function countdown() {
+        setTimeout(countdown, 1000);
+        seconds = seconds < 10 ? `0${seconds}` : seconds;
+        showTime.innerHTML = `${startMinutes} : ${seconds}`;
+
+        seconds--;
+        if (seconds < 0) {
+          seconds = 59;
+          startMinutes--;
+        }
+
+        if (startMinutes < 0) {
+          startMinutes = 0;
+          seconds = 0;
+        }
+
+        if (startMinutes === 0 && seconds === 0) {
+          result();
+        }
+
+      }
+      countdown();
+
+      function result() {
+        const answerContainers = questionContainer.querySelectorAll(".answers");
+
+        let correct = 0;
+        let wrong = 0;
+
+        randomQuestion.forEach((currentQuestion, questionNumber) => {
+          const answerContainer = answerContainers[questionNumber];
+
+          const selector = `input[name=question${questionNumber}]:checked`;
+          const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+          if (userAnswer === currentQuestion.correctAnswer) {
+            correct++;
+          } else {
+            wrong++;
+          }
+
+          sessionStorage.setItem('length', randomQuestion.length);
+          sessionStorage.setItem('wrong', wrong);
+          sessionStorage.setItem('correct', correct);
+          location.href = "resultLatihan.html";
+        });
+      }
+
+      const nama = sessionStorage.getItem('nama');
+      if (nama === "" || nama === null) {
+        location.href = './';
+      }
+    </script>
+  </body>
+</html>

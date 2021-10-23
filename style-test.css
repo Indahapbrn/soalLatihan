@@ -1,0 +1,150 @@
+.slide {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  
+  .active-slide {
+    opacity: 1;
+    z-index: 2;
+  }
+  
+  .card {
+    position: relative;
+
+  }
+
+  .card-body {
+    height: 100%;
+    
+  }
+
+  .card-header {
+    background-color: #F6EDD9;
+  }
+  
+  .quiz-container {
+    position: relative;
+    height: 500px;
+
+    margin-top: 10px;
+  }
+  
+  .question {
+    font-size: 16px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .answers {
+    margin-bottom: 20px;
+    text-align: left;
+    display: inline-block;
+  }
+  
+  .answers label {
+    display: block;
+    position: relative;
+    color: brown;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 4px 0 4px 20px;
+    margin: 0;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease 0s;
+  }
+
+  .answer input[type=radio] {
+    margin: auto;
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+.answers label:hover ,
+.answer input[type=radio]:checked+label{
+    background-color: rgba(0,0,0,0.05);
+    padding: 5px;
+}
+
+@media only screen and (max-width:767px){
+    .answer{ margin: 0 0 20px; }
+}
+  
+  #next {
+    width: 180px;
+    height: 50px;
+    margin: 7px auto;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background: #78C664;
+    color: black;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  #next:hover {
+    background: #B8E067;
+    border: 1px solid #fff;
+    letter-spacing: 2px;
+  }
+
+  #back {
+    width: 180px;
+    height: 50px;
+    margin: 7px auto;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background: grey;
+    color: black;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  #submit {
+    width: 180px;
+    height: 50px;
+    margin: 7px auto;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background: #d13131;
+    color: black;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  
+  #submit:hover {
+    background: rgb(224, 105, 125);
+    border: 1px solid #fff;
+    letter-spacing: 2px;
+  }
+  @media only screen and(max-width: 720px) {
+    .quiz-container {
+      height: 800px;
+    }
+  }
+  
+  @media only screen and (max-device-width: 400px) {
+    .quiz-container {
+      height: 575px;
+    }
+    #next, #back, #submit {
+      width: 60%;
+    }
+  }
